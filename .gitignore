@@ -1,4 +1,3 @@
-
 analyze_new_reviews.py
 gcp-creds.json
 *.env
@@ -8,4 +7,5 @@ logs/
 airflow.db
 __pycache__/
 config/
-.benchmarks
+venv/
+docker-compose.override.yml
