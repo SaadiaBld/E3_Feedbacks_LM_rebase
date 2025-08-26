@@ -1,0 +1,12 @@
+#Instruction: This YAML file is used to execute a Google Cloud Run job named "scraper-job" in the "europe-west1" region of the "trustpilot-satisfaction" project.
+main:
+  steps:
+    - run_job:
+        call: http.post
+        args:
+          url: https://run.googleapis.com/v2/projects/trustpilot-satisfaction/locations/europe-west1/jobs/scraper-job:run
+          auth:
+            type: OAuth2
+          headers:
+            Content-Type: application/json
+          body: {}

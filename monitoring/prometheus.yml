@@ -1,0 +1,12 @@
+#fichier de configuration yaml pour prometheus pour aller chercher les metriques à un port precis 
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'verbatim_exporter'     #pour le pull des métriques de l'exporter, depuis l'url exporter:8000/metrics
+    static_configs:
+      - targets: ['exporter:8000'] #prometheus va aller chercher les métriques à cette adresse (service docker qui s'apelle exporter, port 8000)
+
+  - job_name: 'pushgateway'    #pour le push des métriques vers le pushgateway
+    static_configs:
+      - targets: ['pushgateway:9091']

@@ -1,0 +1,26 @@
+# Framework de test principal
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+pytest-asyncio>=0.21.0
+
+# Validation des données
+great-expectations>=0.17.0
+pydantic>=2.0.0
+
+# Mock et simulation d'API
+responses>=0.23.0
+httpx>=0.24.0
+
+# Performance et monitoring
+psutil>=5.9.0
+pytest-benchmark>=4.0.0
+
+# Qualité code (pour C12)
+pylint>=2.17.0
+black>=23.0.0
+mypy>=1.5.0
+
+# GCP et airflow
+google-cloud-bigquery
+apache-airflow
