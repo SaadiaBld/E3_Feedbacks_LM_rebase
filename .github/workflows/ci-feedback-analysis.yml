@@ -53,8 +53,9 @@ jobs:
       - name: Set up GCP Credentials
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > gcp_credentials.json
-          chmod 600 gcp_credentials.json # Set appropriate permissions
+          mkdir -p config # Create the config directory
+          echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > config/trustpilot-satisfaction-43aac3dd82a9.json
+          chmod 600 config/trustpilot-satisfaction-43aac3dd82a9.json # Set appropriate permissions
         env:
           GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
 
@@ -64,7 +65,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
           PYTEST_RUNNING: "true"
-          GOOGLE_APPLICATION_CREDENTIALS: gcp_credentials.json # Point to the created file
+          GOOGLE_APPLICATION_CREDENTIALS: config/trustpilot-satisfaction-43aac3dd82a9.json # Point to the created file
         run: |
           # Start Docker Compose services
           docker compose up -d
