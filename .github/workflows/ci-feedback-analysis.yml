@@ -66,4 +66,21 @@ jobs:
           PYTEST_RUNNING: "true"
           GOOGLE_APPLICATION_CREDENTIALS: gcp_credentials.json # Point to the created file
         run: |
+          # Start Docker Compose services
+          docker compose up -d
+
+          # Wait for Postgres to be ready
+          echo "Waiting for Postgres to be ready..."
+          until docker exec e3-feedbacks_lm-postgres-1 pg_isready -U airflow -d airflow; do
+            sleep 1
+          done
+          echo "Postgres is ready."
+
+          # Wait for Airflow Webserver to be healthy (optional, but good practice)
+          echo "Waiting for Airflow Webserver to be healthy..."
+          until curl --output /dev/null --silent --head --fail http://localhost:8080/health; do
+            sleep 1
+          done
+          echo "Airflow Webserver is healthy."
+
           python -m pytest -v -m "integration"
