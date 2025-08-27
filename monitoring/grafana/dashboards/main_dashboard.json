@@ -1,18 +1,8 @@
 {
   "__inputs": [],
   "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.5.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    }
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "7.5.0" },
+    { "type": "datasource", "id": "prometheus", "name": "Prometheus", "version": "1.0.0" }
   ],
   "annotations": {
     "list": [
@@ -37,215 +27,184 @@
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": { "mode": "thresholds" },
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 0
-      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
       "id": 1,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
       "targets": [
-        {
-          "expr": "verbatims_analyzed_total",
-          "legendFormat": "Total Verbatims Analyzed",
-          "refId": "A"
-        }
+        { "expr": "increase(verbatims_analyzed_total[$__range])", "legendFormat": "Analyzed in range", "refId": "A" }
       ],
-      "title": "Verbatims Analyzed",
+      "title": "Verbatims Analyzed (in range)",
       "type": "stat"
     },
+
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": { "mode": "thresholds" },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
+            "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ]
           }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 0
-      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
       "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
       "targets": [
-        {
-          "expr": "errors_json_total",
-          "legendFormat": "Total JSON Errors",
-          "refId": "A"
-        }
+        { "expr": "increase(errors_json_total[$__range])", "legendFormat": "JSON Errors (in range)", "refId": "A" }
       ],
-      "title": "JSON Errors",
+      "title": "JSON Errors (in range)",
       "type": "stat"
     },
+
     {
       "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": { "mode": "thresholds" },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
+            "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ]
           }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 0
-      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
       "id": 3,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0",
       "targets": [
-        {
-          "expr": "bq_insert_errors_total",
-          "legendFormat": "Total BigQuery Insert Errors",
-          "refId": "A"
-        }
+        { "expr": "increase(bq_insert_errors_total[$__range])", "legendFormat": "BQ Insert Errors (in range)", "refId": "A" }
       ],
-      "title": "BigQuery Insert Errors",
+      "title": "BigQuery Insert Errors (in range)",
       "type": "stat"
     },
+
     {
       "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 24,
-        "x": 0,
-        "y": 8
-      },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 8 },
       "id": 4,
       "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
+        "legend": { "displayMode": "list", "placement": "bottom" },
+        "tooltip": { "mode": "single" }
       },
       "targets": [
         {
-          "expr": "rate(analysis_duration_seconds_sum[5m]) / rate(analysis_duration_seconds_count[5m])",
-          "legendFormat": "Average Analysis Duration (5m rate)",
+          "expr": "rate(verbatim_analysis_duration_seconds_sum[5m]) / rate(verbatim_analysis_duration_seconds_count[5m])",
+          "legendFormat": "Avg Analysis Duration (5m rate)",
           "refId": "A"
         }
       ],
       "title": "Average Analysis Duration",
       "type": "timeseries"
+    },
+
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 8 },
+      "id": 5,
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom" },
+        "tooltip": { "mode": "single" }
+      },
+      "targets": [
+        {
+          "expr": "100 * sum(increase(claude_calls_total{status=\"success\"}[1h])) / sum(increase(claude_calls_total[1h]))",
+          "legendFormat": "Claude Success Rate (1h)",
+          "refId": "A"
+        }
+      ],
+      "title": "Claude Success Rate",
+      "type": "timeseries"
+    },
+
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "thresholds" } },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 18 },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        { "expr": "increase(claude_response_empty_total[$__range])", "legendFormat": "Empty Responses (in range)", "refId": "A" }
+      ],
+      "title": "Claude Empty Responses (in range)",
+      "type": "stat"
+    },
+
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "thresholds" } },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 18 },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [
+        { "expr": "increase(verbatims_skipped_total[$__range])", "legendFormat": "Skipped (in range)", "refId": "A" }
+      ],
+      "title": "Verbatims Skipped (in range)",
+      "type": "stat"
     }
   ],
   "refresh": "10s",
   "schemaVersion": 27,
   "style": "dark",
   "tags": [],
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-1h",
-    "to": "now"
-  },
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
   "title": "Application Monitoring",
   "uid": "my-awesome-dashboard",
-  "version": 1
+  "version": 2
 }

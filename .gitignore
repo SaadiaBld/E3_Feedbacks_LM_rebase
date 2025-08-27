@@ -8,3 +8,14 @@ __pycache__/
 config/
 venv/
 docker-compose.override.yml
+# Prometheus
+prometheus-data/
+# Grafana
+grafana/grafana.db
+grafana/csv/
+grafana/pdf/
+grafana/plugins/
+grafana/png/
+grafana-data/
+monitoring/grafana/grafana.db
+monitoring/grafana/plugins/
