@@ -48,7 +48,7 @@ def test_claude_golden_set(test_case):
     actual_result = classify_with_claude(verbatim)
     print(f"Actual result: {actual_result}")
 
-    # Assurez-vous que le résultat n'est pas None (en cas d'erreur API ou de validation)
+    # Vérifie que la réponse n'est pas None
     assert actual_result is not None
 
     # Vérifie que la longueur des listes de thèmes correspond

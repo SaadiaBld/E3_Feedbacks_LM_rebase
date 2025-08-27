@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch
+import os
 
 # Protéger les imports Airflow pour une exécution locale possible
 try:
@@ -16,8 +17,12 @@ except ImportError:
 @pytest.fixture(scope="module")
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
 def dagbag():
-    # Le DagBag charge les dags depuis le dossier, l'import direct n'est pas nécessaire
-    return DagBag(dag_folder="/opt/airflow/dags", include_examples=False)
+    # Construit un chemin absolu vers le dossier des dags pour une robustesse maximale
+    current_test_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_test_dir)
+    dags_folder = os.path.join(project_root, 'airflow', 'dags')
+
+    return DagBag(dag_folder=dags_folder, include_examples=False)
 
 @pytest.mark.integration # ADDED THIS LINE
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
