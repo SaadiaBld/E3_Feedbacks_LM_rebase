@@ -84,7 +84,7 @@ jobs:
           echo "Postgres is ready."
 
           # Wait for Airflow Webserver to be healthy (optional, but good practice)
-          echo "Waiting for Airflow Webserver to be healthy..."
+          echo "Waiting for Airflow Webserver to be healthy"
           until curl --output /dev/null --silent --head --fail http://localhost:8080/health; do
             sleep 1
           done
