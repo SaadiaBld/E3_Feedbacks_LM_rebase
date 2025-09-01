@@ -42,7 +42,7 @@ jobs:
           # s'ils ne sont pas explicitement marqués comme intégration
           PYTEST_RUNNING: "true"
         run: |
-          python -m pytest -v --cov=api --cov=scripts_data --cov-report=xml -m "not integration"
+          python -m pytest -v --cov=api --cov=scripts_data --cov-report=html --cov-report=term-missing -m "not integration"
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
@@ -50,8 +50,14 @@ jobs:
           name: coverage-report
           path: coverage.xml
 
+      - name: Upload HTML Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-coverage-report
+          path: htmlcov
+
       - name: Set up GCP Credentials
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/ci-tests'
         run: |
           mkdir -p config # Create the config directory
           echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > config/trustpilot-satisfaction-43aac3dd82a9.json
@@ -60,7 +66,7 @@ jobs:
           GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
 
       - name: Run Integration Tests (on main branch only)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/ci-tests'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
@@ -78,7 +84,7 @@ jobs:
           echo "Postgres is ready."
 
           # Wait for Airflow Webserver to be healthy (optional, but good practice)
-          echo "Waiting for Airflow Webserver to be healthy..."
+          echo "Waiting for Airflow Webserver to be healthy"
           until curl --output /dev/null --silent --head --fail http://localhost:8080/health; do
             sleep 1
           done
