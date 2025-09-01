@@ -1,10 +1,11 @@
+# Indique à grafana où trouver les tableaux de bord à charger
 apiVersion: 1
 providers:
-  - name: 'default'
-    orgId: 1
-    folder: ''
-    type: file
-    disableDeletion: false
-    editable: true
+  - name: 'provisioned'   #nom du provider)
+    orgId: 1       # ID de l'organisation, par défaut 1. L'organisation est une entité dans Grafana qui permet de regrouper des utilisateurs et des tableaux de bord.
+    folder: ''           #dossier dans lequel les tableaux de bord seront organisés. Vide signifie le dossier racine.
+    type: file     #"file"= fichiers JSON
+    disableDeletion: true
+    editable: false
     options:
-      path: /var/lib/grafana/dashboards
+      path: /var/lib/grafana/provisioned
