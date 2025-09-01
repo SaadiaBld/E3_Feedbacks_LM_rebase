@@ -26,87 +26,60 @@
     {
       "datasource": "Prometheus",
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "mappings": [],
-          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] }
-        },
+        "defaults": { "color": { "mode": "thresholds" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null } ] } },
         "overrides": []
       },
       "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
       "id": 1,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
       "targets": [
-        { "expr": "increase(verbatims_analyzed_total[$__range])", "legendFormat": "Analyzed in range", "refId": "A" }
+        {
+          "expr": "sum(last_over_time(verbatims_analyzed_total{job=\"verbatim_pipeline\"}[$__range])) or sum(last_over_time(verbatims_analyzed_total{exported_job=\"verbatim_pipeline\"}[$__range]))",
+          "legendFormat": "Analyzed (snapshot)",
+          "refId": "A"
+        }
       ],
-      "title": "Verbatims Analyzed (in range)",
+      "title": "Verbatims Analyzed (snapshot)",
       "type": "stat"
     },
 
     {
       "datasource": "Prometheus",
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ]
-          }
-        },
+        "defaults": { "color": { "mode": "thresholds" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] } },
         "overrides": []
       },
       "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
       "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
       "targets": [
-        { "expr": "increase(errors_json_total[$__range])", "legendFormat": "JSON Errors (in range)", "refId": "A" }
+        {
+          "expr": "sum(last_over_time(errors_json_total{job=\"verbatim_pipeline\"}[$__range])) or sum(last_over_time(errors_json_total{exported_job=\"verbatim_pipeline\"}[$__range]))",
+          "legendFormat": "JSON Errors (snapshot)",
+          "refId": "A"
+        }
       ],
-      "title": "JSON Errors (in range)",
+      "title": "JSON Errors (snapshot)",
       "type": "stat"
     },
 
     {
       "datasource": "Prometheus",
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ]
-          }
-        },
+        "defaults": { "color": { "mode": "thresholds" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] } },
         "overrides": []
       },
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
       "id": 3,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
       "targets": [
-        { "expr": "increase(bq_insert_errors_total[$__range])", "legendFormat": "BQ Insert Errors (in range)", "refId": "A" }
+        {
+          "expr": "sum(last_over_time(bq_insert_errors_total{job=\"verbatim_pipeline\"}[$__range])) or sum(last_over_time(bq_insert_errors_total{exported_job=\"verbatim_pipeline\"}[$__range]))",
+          "legendFormat": "BQ Insert Errors (snapshot)",
+          "refId": "A"
+        }
       ],
-      "title": "BigQuery Insert Errors (in range)",
+      "title": "BigQuery Insert Errors (snapshot)",
       "type": "stat"
     },
 
@@ -115,18 +88,15 @@
       "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
       "gridPos": { "h": 10, "w": 12, "x": 0, "y": 8 },
       "id": 4,
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom" },
-        "tooltip": { "mode": "single" }
-      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "single" } },
       "targets": [
         {
-          "expr": "rate(verbatim_analysis_duration_seconds_sum[5m]) / rate(verbatim_analysis_duration_seconds_count[5m])",
-          "legendFormat": "Avg Analysis Duration (5m rate)",
+          "expr": "(\n  sum(last_over_time(verbatim_analysis_duration_seconds_sum{job=\"verbatim_pipeline\"}[$__range]))\n  /\n  sum(last_over_time(verbatim_analysis_duration_seconds_count{job=\"verbatim_pipeline\"}[$__range]))\n)\nOR\n(\n  sum(last_over_time(verbatim_analysis_duration_seconds_sum{exported_job=\"verbatim_pipeline\"}[$__range]))\n  /\n  sum(last_over_time(verbatim_analysis_duration_seconds_count{exported_job=\"verbatim_pipeline\"}[$__range]))\n)",
+          "legendFormat": "Avg Analysis Duration (snapshot)",
           "refId": "A"
         }
       ],
-      "title": "Average Analysis Duration",
+      "title": "Average Analysis Duration (snapshot)",
       "type": "timeseries"
     },
 
@@ -135,64 +105,49 @@
       "fieldConfig": { "defaults": { "unit": "percent" }, "overrides": [] },
       "gridPos": { "h": 10, "w": 12, "x": 12, "y": 8 },
       "id": 5,
-      "options": {
-        "legend": { "displayMode": "list", "placement": "bottom" },
-        "tooltip": { "mode": "single" }
-      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "single" } },
       "targets": [
         {
-          "expr": "100 * sum(increase(claude_calls_total{status=\"success\"}[1h])) / sum(increase(claude_calls_total[1h]))",
-          "legendFormat": "Claude Success Rate (1h)",
+          "expr": "100 * (\n  sum(last_over_time(claude_calls_total{job=\"verbatim_pipeline\",status=\"success\"}[$__range]))\n  /\n  sum(last_over_time(claude_calls_total{job=\"verbatim_pipeline\"}[$__range]))\n)\nOR\n100 * (\n  sum(last_over_time(claude_calls_total{exported_job=\"verbatim_pipeline\",status=\"success\"}[$__range]))\n  /\n  sum(last_over_time(claude_calls_total{exported_job=\"verbatim_pipeline\"}[$__range]))\n)",
+          "legendFormat": "Claude Success Rate (snapshot)",
           "refId": "A"
         }
       ],
-      "title": "Claude Success Rate",
+      "title": "Claude Success Rate (snapshot)",
       "type": "timeseries"
     },
 
     {
       "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": { "color": { "mode": "thresholds" } },
-        "overrides": []
-      },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } }, "overrides": [] },
       "gridPos": { "h": 8, "w": 8, "x": 0, "y": 18 },
       "id": 6,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
       "targets": [
-        { "expr": "increase(claude_response_empty_total[$__range])", "legendFormat": "Empty Responses (in range)", "refId": "A" }
+        {
+          "expr": "sum(last_over_time(claude_response_empty_total{job=\"verbatim_pipeline\"}[$__range])) or sum(last_over_time(claude_response_empty_total{exported_job=\"verbatim_pipeline\"}[$__range]))",
+          "legendFormat": "Empty Responses (snapshot)",
+          "refId": "A"
+        }
       ],
-      "title": "Claude Empty Responses (in range)",
+      "title": "Claude Empty Responses (snapshot)",
       "type": "stat"
     },
 
     {
       "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": { "color": { "mode": "thresholds" } },
-        "overrides": []
-      },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } }, "overrides": [] },
       "gridPos": { "h": 8, "w": 8, "x": 8, "y": 18 },
       "id": 7,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "textMode": "auto"
-      },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
       "targets": [
-        { "expr": "increase(verbatims_skipped_total[$__range])", "legendFormat": "Skipped (in range)", "refId": "A" }
+        {
+          "expr": "sum(last_over_time(verbatims_skipped_total{job=\"verbatim_pipeline\"}[$__range])) or sum(last_over_time(verbatims_skipped_total{exported_job=\"verbatim_pipeline\"}[$__range]))",
+          "legendFormat": "Skipped (snapshot)",
+          "refId": "A"
+        }
       ],
-      "title": "Verbatims Skipped (in range)",
+      "title": "Verbatims Skipped (snapshot)",
       "type": "stat"
     }
   ],
@@ -201,10 +156,10 @@
   "style": "dark",
   "tags": [],
   "templating": { "list": [] },
-  "time": { "from": "now-1h", "to": "now" },
+  "time": { "from": "now-24h", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Application Monitoring",
-  "uid": "my-awesome-dashboard",
-  "version": 2
+  "title": "Application Monitoring (Snapshot)",
+  "uid": "verbatim-snapshot",
+  "version": 3
 }

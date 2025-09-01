@@ -19,3 +19,10 @@ grafana/png/
 grafana-data/
 monitoring/grafana/grafana.db
 monitoring/grafana/plugins/
+# Log files
+*.log
+
+# Grafana exports
+monitoring/grafana/csv/
+monitoring/grafana/png/
+monitoring/grafana/pdf/

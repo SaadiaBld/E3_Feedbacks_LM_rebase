@@ -2,12 +2,17 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator  # Corrigé
 from datetime import datetime, timedelta
-import pendulum, sys, os, logging
+import pendulum, sys, os, logging, time
 from scripts_data.scraper import scrape_reviews
 from scripts_data.cleaner import clean_data
 from scripts_data.main import main as run_full_scraper_pipeline
 from api.bq_insert_clean_data import insert_clean_reviews_to_bq
 from dotenv import load_dotenv
+
+from monitoring.metrics import ANALYSIS_DURATION, push_metrics_to_gateway
+
+MONITORING_JOB = "verbatim_pipeline"
+MONITORING_INSTANCE = os.getenv("MONITORING_INSTANCE", "dev")
 
 # Chargement des variables d'environnement
 load_dotenv("/opt/airflow/project/.env")
@@ -41,7 +46,11 @@ def wrapper_process_and_insert(**context):
     print(f"Wrapper Analyse/Insert : scrape_date = {scrape_date}")
     print("Fichier de credentials GCP : ", os.getenv("GOOGLE_APPLICATION_CREDENTIALS"))
     if process_and_insert_all:
+        start_time = time.time()
         process_and_insert_all(scrape_date=scrape_date)
+        end_time = time.time()
+        duration = end_time - start_time
+        ANALYSIS_DURATION.observe(duration)
     else:
         raise RuntimeError("Fonction d’analyse non disponible. Vérifiez le fichier de credentials.")
 
@@ -100,5 +109,16 @@ with DAG(
     else:
         analyze_insert_task = EmptyOperator(task_id='skip_analyze_insert_due_to_missing_cred') # Corrigé
 
-    # Orchestration
-    scrape_task >> clean_task >> insert_task >> analyze_insert_task
+def wrapper_push_metrics(**context):
+    push_metrics_to_gateway(job_name=MONITORING_JOB, instance=MONITORING_INSTANCE)
+
+
+# New task for pushing metrics
+push_metrics_task = PythonOperator(
+    task_id='push_metrics',
+    python_callable=wrapper_push_metrics,
+    trigger_rule="all_done", # Added trigger_rule
+)
+
+# Orchestration
+scrape_task >> clean_task >> insert_task >> analyze_insert_task >> push_metrics_task

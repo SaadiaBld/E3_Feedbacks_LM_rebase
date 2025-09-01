@@ -18,10 +18,14 @@ HEADERS = {
 logger = logging.getLogger(__name__)
 
 def generate_review_hash(row):
+    """créer un hash unique basé sur auteur, contenu et date de publication"""
     key = f"{row['author']}|{row['content']}|{row['publication_date']}"
     return hashlib.md5(key.encode('utf-8')).hexdigest()
 
 def scrape_reviews(mode=None, scrape_date=None):
+    """fonction principale de scraping des avis. scrape_date est la date du jour au format ISO (YYYY-MM-DD); 
+    cutoff_date est la date limite pour arrêter le scraping (7 jours avant la date du jour).
+    mode peut être 'json', 'pandas' ou 'csv' (par défaut défini par la variable d'environnement SCRAPER_MODE)"""
     mode = mode or SCRAPER_MODE
     scrape_date = scrape_date or datetime.utcnow().date().isoformat()
     cutoff_date = datetime.utcnow().date() - timedelta(days=7)

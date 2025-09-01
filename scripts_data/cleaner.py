@@ -38,8 +38,8 @@ def clean_csv(input_file, output_file):
     # Nettoyer les commentaires restants
     df['content'] = df['content'].apply(clean_text)
 
-    #supprimer les lignes en double pour les champs 'content' et 'author' similaire
-    df = df.drop_duplicates(subset=['author', 'content'], keep='first')
+    #supprimer les lignes en doubles basées sur review_id
+    df = df.drop_duplicates(subset=['review_id'], keep='first')
     
     # Sauvegarder le CSV nettoyé
     if isinstance(output_file, (str, os.PathLike)):

@@ -1,0 +1,6 @@
+monitoring/grafana/csv/
+monitoring/grafana/png/
+monitoring/grafana/pdf/
+monitoring/grafana-data/csv/
+monitoring/grafana-data/pdf/
+monitoring/grafana-data/png/

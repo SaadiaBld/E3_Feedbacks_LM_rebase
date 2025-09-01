@@ -23,6 +23,8 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "true"
       PYTHONPATH: /opt/airflow/project
+      AIRFLOW_UID: ${UID}
+      AIRFLOW_GID: ${GID}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -43,6 +45,8 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       PYTHONPATH: /opt/airflow/project
+      AIRFLOW_UID: ${UID}
+      AIRFLOW_GID: ${GID}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./data:/opt/airflow/data
@@ -68,6 +72,7 @@ services:
     container_name: prometheus
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus-data:/prometheus
     ports:
       - "9090:9090"
 
@@ -75,12 +80,20 @@ services:
     image: grafana/grafana:10.2.3
     ports:
       - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
 
   pushgateway:
     image: prom/pushgateway
+    command:
+      - --persistence.file=/data/metrics
+      - --persistence.interval=5m
+    volumes:
+      - ./pushgateway-data:/data
     ports:
       - "9091:9091"
 
 
 volumes:
   postgres-db-volume:
+  grafana-data:

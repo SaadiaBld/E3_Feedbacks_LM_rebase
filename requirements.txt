@@ -26,3 +26,6 @@ pytest-benchmark>=4.0.0
 pylint>=2.17.0
 black>=23.0.0
 mypy>=1.5.0
+
+#monitoring
+prometheus_client==0.20.0
