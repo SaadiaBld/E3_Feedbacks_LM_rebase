@@ -64,6 +64,9 @@ jobs:
           chmod 600 config/trustpilot-satisfaction-43aac3dd82a9.json # Set appropriate permissions
         env:
           GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PYTEST_RUNNING: "true"
 
       - name: Run Integration Tests (on main branch only)
         if: github.ref == 'refs/heads/ci-tests'
@@ -72,6 +75,9 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
           PYTEST_RUNNING: "true"
           GOOGLE_APPLICATION_CREDENTIALS: config/trustpilot-satisfaction-43aac3dd82a9.json # Point to the created file
+          AIRFLOW__CORE__FERNET_KEY: ${{ secrets.AIRFLOW_CORE__FERNET_KEY }}
+          UID: ${{ secrets.UID }}
+          GID: ${{ secrets.GID }}
         run: |
           # Start Docker Compose services
           docker compose up -d
