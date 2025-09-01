@@ -26,3 +26,6 @@ monitoring/grafana/plugins/
 monitoring/grafana/csv/
 monitoring/grafana/png/
 monitoring/grafana/pdf/
+
+#logs
+claude_errors.log
