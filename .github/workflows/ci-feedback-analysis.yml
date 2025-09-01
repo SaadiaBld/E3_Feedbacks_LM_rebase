@@ -42,7 +42,7 @@ jobs:
           # s'ils ne sont pas explicitement marqués comme intégration
           PYTEST_RUNNING: "true"
         run: |
-          python -m pytest -v --cov=api --cov=scripts_data --cov-report=html -m "not integration"
+          python -m pytest -v --cov=api --cov=scripts_data --cov-report=html --cov-report=term-missing -m "not integration"
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
