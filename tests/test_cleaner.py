@@ -19,11 +19,11 @@ CSV_WITH_EMPTY_LINES = (
 
 def test_clean_csv_output_structure():
     """Vérifie que la structure du CSV de sortie est correcte."""
-    # Arrange
+    # ici ce qui se passe c'est qu'on simule des fichiers en mémoire avec StringIO
     input_file = StringIO(CSV_VALID_DATA)
     output_file = StringIO()
 
-    # Act
+    # on va appeler la fonction de nettoyage
     clean_csv(input_file, output_file)
     output_file.seek(0)  # Revenir au début du "fichier" en mémoire pour le lire
     df = pd.read_csv(output_file)
@@ -36,15 +36,16 @@ def test_clean_csv_output_structure():
 
 def test_clean_csv_removes_empty_lines():
     """Vérifie que les lignes avec un contenu vide sont bien supprimées."""
-    # Arrange
+    # on va simuler des fichiers en mémoire avec StringIO. 
+    # StringIO permet de créer un "fichier" en mémoire
     input_file = StringIO(CSV_WITH_EMPTY_LINES)
     output_file = StringIO()
 
-    # Act
+    # appel de la fonction de nettoyage
     clean_csv(input_file, output_file)
     output_file.seek(0) # Revenir au début du "fichier" en mémoire pour le lire
     df = pd.read_csv(output_file)
 
-    # Assert
+    # on va vérifier que la ligne avec le contenu vide a été supprimée
     assert len(df) == 2, "La ligne avec le contenu vide aurait dû être supprimée"
     assert not df['content'].isnull().any(), "La colonne content ne devrait pas avoir de nuls"

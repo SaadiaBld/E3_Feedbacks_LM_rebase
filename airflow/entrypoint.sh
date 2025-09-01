@@ -1,6 +1,10 @@
 #!/bin/bash
+set -e
 
-pip install -r /requirements.txt
+# (optionnel) mini attente Postgres
+sleep 2
+
+pip install --no-cache-dir -r /requirements.txt || true
 
 # Initialise Airflow DB si pas encore initialisée
 if [ ! -f "/opt/airflow/airflow.db_initialized" ]; then

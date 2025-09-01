@@ -21,6 +21,10 @@ logger.setLevel(logging.INFO)
 
 
 def upload_to_bigquery(csv_path: str, target_table_id: str):
+    """Charge le CSV nettoyé dans une table temporaire, puis fusionne avec la table cible en évitant les doublons.
+     csv_path : chemin local du fichier CSV
+     target_table_id : identifiant complet de la table cible dans BigQuery (projet.dataset.table)"""
+
     df = pd.read_csv(csv_path)
     expected_columns = ['review_id', 'rating', 'content', 'author', 'publication_date', 'scrape_date']
     if list(df.columns) != expected_columns:

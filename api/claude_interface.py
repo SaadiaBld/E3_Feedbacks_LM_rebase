@@ -23,14 +23,20 @@ THEME_LABELS = {t["nom"] for t in THEMES}
 
 # Log setup
 logger = logging.getLogger("claude_logger")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.INFO) # Le logger principal capture tout à partir de INFO
 logger.propagate = False
 
-# Ne pas créer de fichier de log pendant les tests pour éviter les problèmes de permission
 if 'pytest' not in sys.modules:
-    handler = logging.FileHandler("claude_errors.log", encoding="utf-8")
-    handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-    logger.addHandler(handler)
+    # Gestionnaire pour le log général (tous les niveaux à partir de INFO)
+    general_handler = logging.FileHandler("claude.log", encoding="utf-8") # Renommé
+    general_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(general_handler)
+
+    # Gestionnaire pour les erreurs et avertissements seulement
+    error_handler = logging.FileHandler("claude_errors.log", encoding="utf-8")
+    error_handler.setLevel(logging.WARNING) # Ne capture que WARNING et ERROR
+    error_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(error_handler)
 
 # Fonction principale pour classifier les verbatims avec Claude
 def classify_with_claude(verbatim: str) -> list[dict] | None:

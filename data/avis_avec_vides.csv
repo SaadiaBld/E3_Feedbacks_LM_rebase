@@ -1,0 +1,6 @@
+"review_id","rating","content","author","publication_date","scrape_date"
+"r1","5","Bon produit, rien à redire.","Marc","2024-06-01","2024-06-02"
+"r2","3","","Sophie","2024-06-01","2024-06-02"
+"r3","4","   ","Leo","2024-06-01","2024-06-02"
+"r4","2","Produit endommagé à la livraison.","Julie","2024-06-01","2024-06-02"
+"r5","1","Mauvais service client.","Pierre","2024-06-01","2024-06-02"

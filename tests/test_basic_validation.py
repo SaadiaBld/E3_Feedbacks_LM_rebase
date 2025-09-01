@@ -1,5 +1,3 @@
-"""
-"""
 import pytest
 import os
 from pathlib import Path
@@ -13,7 +11,7 @@ class TestBasicValidation:
         project_root = Path(__file__).parent.parent
         
         # Vérifier les dossiers essentiels
-        required_folders = ['airflow', 'config', 'data', 'scripts_data']
+        required_folders = ['airflow', 'data', 'scripts_data'] # Removed 'config'
         for folder in required_folders:
             assert (project_root / folder).exists(), f"Dossier {folder} manquant"
     

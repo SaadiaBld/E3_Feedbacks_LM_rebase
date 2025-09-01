@@ -1,5 +1,6 @@
 import pytest
 from unittest.mock import patch
+import os
 
 # Protéger les imports Airflow pour une exécution locale possible
 try:
@@ -16,9 +17,14 @@ except ImportError:
 @pytest.fixture(scope="module")
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
 def dagbag():
-    # Le DagBag charge les dags depuis le dossier, l'import direct n'est pas nécessaire
-    return DagBag(dag_folder="/opt/airflow/dags", include_examples=False)
+    # Construit un chemin absolu vers le dossier des dags pour une robustesse maximale
+    current_test_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_test_dir)
+    dags_folder = os.path.join(project_root, 'airflow', 'dags')
 
+    return DagBag(dag_folder=dags_folder, include_examples=False)
+
+@pytest.mark.integration # ADDED THIS LINE
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
 def test_dag_import_and_structure(dagbag):
     """Vérifie que le DAG est bien importé, sans cycle, et a les bonnes tâches."""
@@ -29,6 +35,7 @@ def test_dag_import_and_structure(dagbag):
     expected_tasks = {"scrape_trustpilot_reviews", "clean_reviews", "insert_clean_reviews_to_bq", "analyze_and_insert"}
     assert expected_tasks.issubset(dag.task_ids), f"Des tâches attendues sont manquantes: {expected_tasks - set(dag.task_ids)}"
 
+@pytest.mark.integration # ADDED THIS LINE
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
 def test_dag_dependencies(dagbag):
     """Vérifie l'enchaînement correct des tâches dans le DAG."""
@@ -45,6 +52,7 @@ def test_dag_dependencies(dagbag):
     assert insert_task.upstream_task_ids == {clean_task.task_id}
     assert analyze_task.upstream_task_ids == {insert_task.task_id}
 
+@pytest.mark.integration # ADDED THIS LINE
 @pytest.mark.skipif(not airflow_installed, reason="Airflow not installed")
 def test_operator_types(dagbag):
     """Vérifie que les tâches utilisent les bons opérateurs Airflow."""

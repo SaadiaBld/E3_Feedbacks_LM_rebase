@@ -1,11 +1,31 @@
-
 analyze_new_reviews.py
 gcp-creds.json
 *.env
 archives/
-data/
 logs/
 airflow.db
 __pycache__/
 config/
-.benchmarks
+venv/
+docker-compose.override.yml
+# Prometheus
+prometheus-data/
+# Grafana
+grafana/grafana.db
+grafana/csv/
+grafana/pdf/
+grafana/plugins/
+grafana/png/
+grafana-data/
+monitoring/grafana/grafana.db
+monitoring/grafana/plugins/
+# Log files
+*.log
+
+# Grafana exports
+monitoring/grafana/csv/
+monitoring/grafana/png/
+monitoring/grafana/pdf/
+
+#logs
+claude_errors.log
