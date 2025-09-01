@@ -1,4 +1,4 @@
-from prometheus_client import Counter, Gauge, Histogram, start_http_server
+from prometheus_client import Counter, Gauge, Histogram, start_http_server, delete_from_gateway
 from prometheus_client import REGISTRY, push_to_gateway
 import socket
 
@@ -104,17 +104,22 @@ def log_analysis_metrics(verbatim_text: str, duration: float, error=False, empty
     print(f" VERBATIMS_ANALYZED après: {VERBATIMS_ANALYZED._value.get()}")
 
 
-def push_metrics_to_gateway(job_name="verbatim_pipeline"):
-    """
-    Push toutes les métriques enregistrées vers le PushGateway.
-    job_name est défini dans Prometheus pour identifier la source des métriques.
-    """
+def push_metrics_to_gateway(job_name="verbatim_pipeline", instance="dev"):
+    # 1) on nettoie le groupe précédent (même job/instance)
+    delete_from_gateway(
+        'http://pushgateway:9091',
+        job=job_name,
+        grouping_key={'instance': instance},
+    )
+    # 2) on pousse le snapshot du run
     try:
         push_to_gateway(
-            "http://pushgateway:9091", 
-            job=job_name, 
-            registry=REGISTRY) #on pousse les métriques vers le port 9091 du service pushgateway, les métriques sont dans un registre global REGISTRY
-        print(f" Métriques poussées vers le PushGateway pour le job : {job_name}")
+            'http://pushgateway:9091',
+            job=job_name,
+            registry=REGISTRY,
+            grouping_key={'instance': instance},
+        )
+        print(f" Métriques poussées vers le PushGateway pour le job : {job_name}, instance: {instance}")
     except Exception as e:
         print(f" Erreur lors du push Prometheus : {e}")
 
